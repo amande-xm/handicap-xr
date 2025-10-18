@@ -1,0 +1,192 @@
+#usda 1.0
+(
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+def Xform "Root"
+{
+    reorder nameChildren = ["Cube", "AmbientAudio", "schizSound1_m4a", "schizSound2_m4a", "schizSound3_m4a", "schizSound4_m4a", "schizSound5_m4a", "schizSound6_m4a", "schizSound7_m4a", "schizSound8_m4a", "schizSound9_m4a"]
+    def Cube "Cube" (
+        active = true
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Material> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        double size = 1
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "HierarchicalFade"
+        {
+            uniform token info:id = "RealityKit.HierarchicalFade"
+            float opacity = 0.7494344
+        }
+    }
+
+    def RealityKitAudioFile "schizSound1_m4a"
+    {
+        uniform asset file = @Sons schizophrénie/schizSound1.m4a@
+        uniform bool shouldLoop = 0
+    }
+
+    def Xform "AmbientAudio"
+    {
+        def RealityKitComponent "AmbientAudio"
+        {
+            uniform token info:id = "RealityKit.AmbientAudio"
+        }
+    }
+
+    def RealityKitAudioFile "schizSound2_m4a"
+    {
+        uniform asset file = @Sons schizophrénie/schizSound2.m4a@
+        uniform bool shouldLoop = 0
+    }
+
+    def RealityKitAudioFile "schizSound3_m4a"
+    {
+        uniform asset file = @Sons schizophrénie/schizSound3.m4a@
+        uniform bool shouldLoop = 0
+    }
+
+    def RealityKitAudioFile "schizSound4_m4a"
+    {
+        uniform asset file = @Sons schizophrénie/schizSound4.m4a@
+        uniform bool shouldLoop = 0
+    }
+
+    def RealityKitAudioFile "schizSound5_m4a"
+    {
+        uniform asset file = @Sons schizophrénie/schizSound5.m4a@
+        uniform bool shouldLoop = 0
+    }
+
+    def RealityKitAudioFile "schizSound6_m4a"
+    {
+        uniform asset file = @Sons schizophrénie/schizSound6.m4a@
+        uniform bool shouldLoop = 0
+    }
+
+    def RealityKitAudioFile "schizSound7_m4a"
+    {
+        uniform asset file = @Sons schizophrénie/schizSound7.m4a@
+        uniform bool shouldLoop = 0
+    }
+
+    def RealityKitAudioFile "schizSound8_m4a"
+    {
+        uniform asset file = @Sons schizophrénie/schizSound8.m4a@
+        uniform bool shouldLoop = 0
+    }
+
+    def RealityKitAudioFile "schizSound9_m4a"
+    {
+        uniform asset file = @Sons schizophrénie/schizSound9.m4a@
+        uniform bool shouldLoop = 0
+    }
+}
+
+def Material "Material"
+{
+    token outputs:mtlx:surface.connect = </Material/PreviewSurface.outputs:out>
+    token outputs:realitykit:vertex
+    float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (318.3086, -32.414062)
+    int ui:nodegraph:realitykit:subgraphOutputs:stackingOrder = 15
+
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "ND_UsdPreviewSurface_surfaceshader"
+        float inputs:clearcoatRoughness = 1
+        color3f inputs:diffuseColor = (0, 0, 0) (
+            colorSpace = "srgb_texture"
+        )
+        float inputs:ior = 1
+        float inputs:metallic = 1
+        float3 inputs:normal
+        float inputs:opacity.connect = </Material/Remap.outputs:out>
+        float inputs:roughness = 1
+        token outputs:out
+        float2 ui:nodegraph:node:pos = (74.96094, -4.3125)
+        int ui:nodegraph:node:stackingOrder = 22
+    }
+
+    def Shader "Remap"
+    {
+        uniform token info:id = "ND_remap_float"
+        float inputs:in.connect = </Material/Fractal3D.outputs:out>
+        float inputs:inhigh
+        float inputs:inlow
+        float inputs:outhigh = 0.25
+        float inputs:outlow
+        float outputs:out
+        float2 ui:nodegraph:node:pos = (-184.05469, -23.910156)
+        int ui:nodegraph:node:stackingOrder = 104
+    }
+
+    def Shader "Fractal3D"
+    {
+        uniform token info:id = "ND_fractal3d_float"
+        float inputs:amplitude = 8
+        float inputs:diminish
+        float inputs:lacunarity
+        int inputs:octaves = 2
+        float3 inputs:position.connect = </Material/Add.outputs:out>
+        float outputs:out
+        float2 ui:nodegraph:node:pos = (-382.59375, -40.085938)
+        int ui:nodegraph:node:stackingOrder = 103
+    }
+
+    def Shader "Multiply"
+    {
+        uniform token info:id = "ND_multiply_float"
+        float inputs:in1.connect = </Material/Time.outputs:out>
+        float inputs:in2 = 0.08
+        float inputs:in2.connect = None
+        float outputs:out
+        float2 ui:nodegraph:node:pos = (-679.71094, 109.57031)
+        int ui:nodegraph:node:stackingOrder = 97
+    }
+
+    def Shader "Time"
+    {
+        uniform token info:id = "ND_time_float"
+        float outputs:out
+        float2 ui:nodegraph:node:pos = (-919.83203, 99.01172)
+        int ui:nodegraph:node:stackingOrder = 65
+    }
+
+    def Shader "Add"
+    {
+        uniform token info:id = "ND_add_vector3FA"
+        float3 inputs:in1.connect = </Material/Remap_1.outputs:out>
+        float inputs:in2.connect = </Material/Multiply.outputs:out>
+        float3 outputs:out
+        float2 ui:nodegraph:node:pos = (-559.6094, 70.546875)
+        int ui:nodegraph:node:stackingOrder = 96
+    }
+
+    def Shader "Remap_1"
+    {
+        uniform token info:id = "ND_remap_vector3FA"
+        float3 inputs:in.connect = </Material/Position.outputs:out>
+        float inputs:inhigh
+        float inputs:inlow
+        float inputs:outlow = 4
+        float3 outputs:out
+        float2 ui:nodegraph:node:pos = (-765.73047, -35.570312)
+        int ui:nodegraph:node:stackingOrder = 102
+    }
+
+    def Shader "Position"
+    {
+        uniform token info:id = "ND_position_vector3"
+        float3 outputs:out
+        float2 ui:nodegraph:node:pos = (-980.5469, -26.5)
+        int ui:nodegraph:node:stackingOrder = 101
+    }
+}
+
